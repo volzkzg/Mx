@@ -4,7 +4,6 @@ import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.Type;
-import compiler.build.SymbolTable;
 
 import java.util.Stack;
 

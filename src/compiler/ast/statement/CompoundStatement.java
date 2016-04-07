@@ -1,8 +1,8 @@
 package compiler.ast.statement;
 
 import compiler.ast.Node;
+import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
-import compiler.build.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;

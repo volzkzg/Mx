@@ -2,11 +2,11 @@ package compiler.ast.declaration;
 
 import compiler.ast.Node;
 import compiler.ast.Symbol;
+import compiler.ast.SymbolTable;
 import compiler.ast.statement.CompoundStatement;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.IntType;
 import compiler.ast.type.Type;
-import compiler.build.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -2,12 +2,12 @@ package compiler.ast.statement.expression.suffix;
 
 import compiler.ast.Node;
 import compiler.ast.Symbol;
+import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.IntType;
 import compiler.ast.type.StringType;
-import compiler.build.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;

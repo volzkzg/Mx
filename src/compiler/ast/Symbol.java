@@ -10,7 +10,6 @@ import compiler.ast.declaration.VariableDeclaration;
 import compiler.ast.statement.VariableDeclarationStatement;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ClassType;
-import compiler.build.SymbolTable;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

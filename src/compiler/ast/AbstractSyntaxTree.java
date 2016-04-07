@@ -6,7 +6,6 @@ package compiler.ast;
 
 import compiler.ast.declaration.Declaration;
 import compiler.ast.declaration.FunctionDeclaration;
-import compiler.build.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;

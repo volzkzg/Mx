@@ -1,7 +1,4 @@
-package compiler.build;
-
-import compiler.ast.Node;
-import compiler.ast.Symbol;
+package compiler.ast;
 
 import java.util.HashMap;
 

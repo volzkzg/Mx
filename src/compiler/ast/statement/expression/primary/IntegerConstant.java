@@ -1,10 +1,10 @@
 package compiler.ast.statement.expression.primary;
 
 import compiler.ast.Node;
+import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.IntType;
-import compiler.build.SymbolTable;
 
 import java.math.BigInteger;
 import java.util.Stack;

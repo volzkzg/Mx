@@ -4,6 +4,7 @@ package compiler.build;
  * Created by bluesnap on 16/3/31.
  */
 
+import compiler.ast.SymbolTable;
 import compiler.parser.GrammarLexer;
 import compiler.parser.GrammarParser;
 import org.antlr.v4.runtime.ANTLRInputStream;

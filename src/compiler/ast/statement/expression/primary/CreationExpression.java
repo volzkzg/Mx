@@ -1,12 +1,12 @@
 package compiler.ast.statement.expression.primary;
 
 import compiler.ast.Node;
+import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.Type;
-import compiler.build.SymbolTable;
 
 import java.util.Stack;
 

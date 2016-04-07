@@ -2,11 +2,11 @@ package compiler.ast.statement;
 
 import compiler.ast.Node;
 import compiler.ast.Symbol;
+import compiler.ast.SymbolTable;
 import compiler.ast.declaration.ClassDeclaration;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.*;
-import compiler.build.SymbolTable;
 
 import java.util.Stack;
 

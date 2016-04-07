@@ -1,7 +1,7 @@
 package compiler;
 
+import compiler.ast.SymbolTable;
 import compiler.build.AstBuilderListener;
-import compiler.build.SymbolTable;
 import compiler.parser.GrammarLexer;
 import compiler.parser.GrammarParser;
 import org.antlr.v4.runtime.ANTLRInputStream;

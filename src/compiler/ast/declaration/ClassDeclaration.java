@@ -2,8 +2,8 @@ package compiler.ast.declaration;
 
 import compiler.ast.Node;
 import compiler.ast.Symbol;
+import compiler.ast.SymbolTable;
 import compiler.ast.statement.VariableDeclarationStatement;
-import compiler.build.SymbolTable;
 
 import java.util.LinkedList;
 import java.util.List;
