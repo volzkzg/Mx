@@ -6,6 +6,7 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.BoolType;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -41,6 +42,10 @@ public class IfStatement extends Statement {
 
     @Override
     public boolean third(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack) {
+        if (condition == null) { // if condition can't be null
+            outputErrorInfomation(this);
+            return false;
+        }
         if (condition != null && !condition.third(current, functionState, forStack))
             return false;
         if (!(condition.expressionType instanceof BoolType)) {
@@ -56,5 +61,43 @@ public class IfStatement extends Statement {
             return false;
         current = current.prev;
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Label label1, label2, label3;
+        label1 = new Label();
+        label2 = new Label();
+        label3 = new Label();
+
+        Address conditionReg = condition.getValue(current, functionState, forStack, function);
+        Branch br = new Branch();
+        br.src = conditionReg;
+        br.label1 = label1;
+        br.label2 = label2;
+        function.body.add(br);
+
+        function.body.add(label1);
+        current = current.getNext();
+        body.generateIR(current, functionState, forStack, function);
+        function.body.add(new Goto(label3));
+        current = current.prev;
+
+        function.body.add(label2);
+        current = current.getNext();
+        elseBody.generateIR(current, functionState, forStack, function);
+        current = current.prev;
+
+        function.body.add(label3);
+
+        /*
+        Expr
+        Branch
+        Label1
+            then body goto label3
+        Label2
+            else body
+        Label3
+        */
     }
 }

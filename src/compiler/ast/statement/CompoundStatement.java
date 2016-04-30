@@ -3,6 +3,7 @@ package compiler.ast.statement;
 import compiler.ast.Node;
 import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
+import compiler.ir.Function;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,5 +43,17 @@ public class CompoundStatement extends Statement {
         if (functionState == null)
             current = current.prev;
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
+                           Function function) {
+        if (functionState == null)
+            current = current.getNext();
+        for (Statement p : statements) {
+            p.generateIR(current, functionState, forStack, function);
+        }
+        if (function == null)
+            current = current.prev;
     }
 }

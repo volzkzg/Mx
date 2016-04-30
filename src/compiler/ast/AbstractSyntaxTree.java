@@ -4,8 +4,11 @@ package compiler.ast;
  * Created by bluesnap on 16/3/30.
  */
 
+import compiler.ast.declaration.ClassDeclaration;
 import compiler.ast.declaration.Declaration;
 import compiler.ast.declaration.FunctionDeclaration;
+import compiler.ast.declaration.GlobalVariableDeclaration;
+import compiler.ir.IR;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,9 +49,32 @@ public class AbstractSyntaxTree extends Node {
 
     @Override
     public boolean third(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack) {
+        boolean check = false;
         for (Node p : declarations) {
             if (!p.third(current, functionState, forStack)) return false;
+            if (p instanceof FunctionDeclaration) {
+                if (((FunctionDeclaration) p).functionName.name.equals("main"))
+                    check = true;
+            }
         }
+        if (!check) return false;
         return true;
+    }
+
+    public IR generateIR(SymbolTable table, FunctionDeclaration functionState, Stack<Node> forStack) {
+        IR ret = new IR();
+
+        for (Node p : declarations) {
+            if (p instanceof FunctionDeclaration) {
+                ret.parts.add(((FunctionDeclaration) p).generateIR(table, functionState, forStack));
+            } else if (p instanceof ClassDeclaration) {
+
+            } else if (p instanceof GlobalVariableDeclaration) {
+
+            }
+        }
+
+        return ret;
+        
     }
 }

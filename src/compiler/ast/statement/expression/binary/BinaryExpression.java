@@ -4,7 +4,10 @@ import compiler.ast.Node;
 import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
+import compiler.ast.statement.expression.suffix.ArrayAccessExpression;
+import compiler.ast.statement.expression.suffix.FieldAccessExpression;
 import compiler.ast.type.*;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -180,5 +183,96 @@ public class BinaryExpression extends Expression {
         }
 
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Address lhs, rhs;
+        lhs = leftHandSide.getValue(current, functionState, forStack, function);
+        rhs = rightHandSide.getValue(current, functionState, forStack, function);
+        Temp dest = new Temp();
+
+        if (operator == BinaryOperator.ASSIGN) {
+            if (leftHandSide instanceof ArrayAccessExpression ||
+                    leftHandSide instanceof FieldAccessExpression) {
+                MemoryAddress memoryAddress = leftHandSide.getAddress(current, functionState, forStack, function);
+                MemoryRead memoryRead = new MemoryRead(dest, memoryAddress);
+                Assign assign = new Assign(dest, rhs);
+                MemoryWrite memoryWrite = new MemoryWrite(dest, memoryAddress);
+                function.body.add(memoryRead);
+                function.body.add(assign);
+                function.body.add(memoryWrite);
+            } else {
+                Assign assign = new Assign();
+                assign.dest = lhs;
+                assign.src = rhs;
+                function.body.add(assign);
+                return lhs;
+            }
+
+            /*
+            Assign assign = new Assign();
+            assign.dest = lhs;
+            assign.src = rhs;
+            function.body.add(assign);
+            return lhs;
+            */
+        } else if (operator == BinaryOperator.ADD) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.ADD, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.SUB) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.SUB, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.MUL) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.MUL, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.DIV) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.DIV, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.MOD) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.MOD, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.BITWISE_AND) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.AND, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.BITWISE_EXCLUSIVE_OR) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.XOR, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.BITWISE_INCLUSIVE_OR) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.OR, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.LOGICAL_AND) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.AND, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.LOGICAL_OR) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.OR, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.EQUAL) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.EQ, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.NOT_EQUAL) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.NE, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.LESS) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.LT, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.LEQ) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.LE, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.GREAT) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.GT, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.GEQ) {
+            RelationExpr relationExpr = new RelationExpr(dest, lhs, RelationOp.GE, rhs);
+            function.body.add(relationExpr);
+        } else if (operator == BinaryOperator.LEFT_SHIFT) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.SHL, rhs);
+            function.body.add(arithmeticExpr);
+        } else if (operator == BinaryOperator.RIGHT_SHIFT) {
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.SHR, rhs);
+            function.body.add(arithmeticExpr);
+        }
+
+        return dest;
     }
 }

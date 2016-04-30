@@ -3,6 +3,8 @@ package compiler.ast.statement;
 import compiler.ast.Node;
 import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
+import compiler.ir.Function;
+import compiler.ir.Goto;
 
 import java.util.Stack;
 
@@ -22,5 +24,11 @@ public class ContinueStatement extends Statement {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        ForLoopStatement top = ((ForLoopStatement) forStack.peek());
+        function.body.add(new Goto(top.label3));
     }
 }

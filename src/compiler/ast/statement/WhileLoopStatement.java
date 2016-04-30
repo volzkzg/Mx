@@ -6,6 +6,10 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.BoolType;
+import compiler.ir.Address;
+import compiler.ir.Branch;
+import compiler.ir.Function;
+import compiler.ir.Label;
 
 import java.util.Stack;
 
@@ -15,7 +19,7 @@ import java.util.Stack;
 public class WhileLoopStatement extends Statement {
     public Expression condition;
     public Statement body;
-
+    public Label label1, label2, label3;
     public WhileLoopStatement() {
         condition = null;
         body = null;
@@ -54,5 +58,30 @@ public class WhileLoopStatement extends Statement {
         forStack.pop();
         current = current.prev;
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        label1 = new Label();
+        label2 = new Label();
+        label3 = new Label();
+        function.body.add(label1);
+
+        Address conditionReg = condition.getValue(current, functionState, forStack, function);
+        Branch br = new Branch();
+        br.src = conditionReg;
+        br.label1 = label2;
+        br.label2 = label3;
+        function.body.add(br);
+
+        function.body.add(label2);
+
+        current = current.getNext();
+        forStack.push(this);
+        body.generateIR(current, functionState, forStack, function);
+        forStack.pop();
+        current = current.prev;
+
+        function.body.add(label3);
     }
 }

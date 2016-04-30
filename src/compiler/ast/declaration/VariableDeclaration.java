@@ -5,6 +5,9 @@ import compiler.ast.Symbol;
 import compiler.ast.SymbolTable;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.*;
+import compiler.ir.Assign;
+import compiler.ir.Function;
+import compiler.ir.Temp;
 
 import java.util.Stack;
 
@@ -111,5 +114,24 @@ public class VariableDeclaration extends Declaration {
             return false;
         }
         return true;
+    }
+
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
+                              Function function) {
+        Temp register = new Temp();
+        current.insert(variableName, this);
+        this.reg = register;
+
+        function.args.add(register);
+
+        if (expression != null) {
+            function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
+            /*
+            if (variableType instanceof ClassType || variableType instanceof ArrayType)
+                function.body.add(new Assign(register, expression.getAddress(current, functionState, forStack, function)));
+            else
+                function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
+            */
+        }
     }
 }

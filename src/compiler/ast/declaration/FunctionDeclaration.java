@@ -7,6 +7,7 @@ import compiler.ast.statement.CompoundStatement;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.IntType;
 import compiler.ast.type.Type;
+import compiler.ir.Function;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -87,5 +88,19 @@ public class FunctionDeclaration extends Declaration {
             return false;
         current = current.prev;
         return true;
+    }
+
+    public Function generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack) {
+        current = current.getNext();
+        Function ret = new Function();
+        ret.name = functionName.name;
+        for (Node p : parameterList) {
+            ((VariableDeclaration) p).generateIR(current, this, forStack, ret);
+        }
+        ((CompoundStatement) functionBody).generateIR(current, this, forStack, ret);
+        current = current.prev;
+        return ret;
+
+        //done
     }
 }

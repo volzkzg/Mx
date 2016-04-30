@@ -4,7 +4,9 @@ package compiler.build;
  * Created by bluesnap on 16/3/31.
  */
 
+import compiler.ast.AbstractSyntaxTree;
 import compiler.ast.SymbolTable;
+import compiler.ir.IR;
 import compiler.parser.GrammarLexer;
 import compiler.parser.GrammarParser;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -43,5 +45,7 @@ public class Build {
             System.out.println("YES");
         else
             System.out.println("NO");
+
+        IR ir = ((AbstractSyntaxTree) AstBuilderListener.property.get(tree)).generateIR(table);
     }
 }

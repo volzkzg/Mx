@@ -4,6 +4,7 @@ import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.Type;
+import compiler.ir.Address;
 
 import java.util.Stack;
 
@@ -11,8 +12,14 @@ import java.util.Stack;
  * Created by bluesnap on 16/3/31.
  */
 public class Node {
+    public Address reg;
     public int lineNumber;
     public boolean ret;
+
+    public Node() {
+        reg = null;
+    }
+
     public void print(int d) {}
 
     public boolean first(SymbolTable current) {
@@ -33,7 +40,6 @@ public class Node {
         System.out.println(treeNode.lineNumber + " is fucked");
     }
 
-    
     public Type getBaseType(Type type) {
         if (type instanceof ArrayType) {
             return getBaseType(((ArrayType) type).baseType);
@@ -57,5 +63,6 @@ public class Node {
             return true;
         }
     }
+
 
 }

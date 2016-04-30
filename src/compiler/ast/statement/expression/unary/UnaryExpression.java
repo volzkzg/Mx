@@ -7,6 +7,9 @@ import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.BoolType;
 import compiler.ast.type.IntType;
 import compiler.ast.type.Type;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.Temp;
 
 import java.util.Stack;
 
@@ -81,5 +84,14 @@ public class UnaryExpression extends Expression {
         }
 
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Temp dest = new Temp();
+        if (operator == UnaryOperator.MINUS) {
+            
+        }
+        return dest;
     }
 }

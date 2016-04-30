@@ -6,6 +6,9 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.VoidType;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.Return;
 
 import java.util.Stack;
 
@@ -52,5 +55,11 @@ public class ReturnStatement extends Statement {
             }
         }
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Address returnReg = returnExpression.getValue(current, functionState, forStack, function);
+        function.body.add(new Return(returnReg));
     }
 }
