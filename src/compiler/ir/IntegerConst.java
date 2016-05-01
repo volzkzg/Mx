@@ -5,8 +5,12 @@ package compiler.ir;
  */
 public class IntegerConst extends Const {
     public int value;
-    IntegerConst() {}
-    IntegerConst(int value) {
+    public IntegerConst() {}
+    public IntegerConst(int value) {
         this.value = value;
+    }
+    public String print() {
+        String ret = ((Integer) value).toString();
+        return ret;
     }
 }

@@ -18,4 +18,9 @@ public class Branch extends Quadruple {
         this.label1 = label1;
         this.label2 = label2;
     }
+
+    public String print() {
+        String ret = "br " + src.print() + " " + label1.print() + " " + label2.print();
+        return ret;
+    }
 }

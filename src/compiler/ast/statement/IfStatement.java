@@ -66,30 +66,48 @@ public class IfStatement extends Statement {
     @Override
     public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
         Label label1, label2, label3;
-        label1 = new Label();
-        label2 = new Label();
-        label3 = new Label();
 
-        Address conditionReg = condition.getValue(current, functionState, forStack, function);
-        Branch br = new Branch();
-        br.src = conditionReg;
-        br.label1 = label1;
-        br.label2 = label2;
-        function.body.add(br);
+        if (elseBody != null) {
+            label1 = new Label();
+            label2 = new Label();
+            label3 = new Label();
 
-        function.body.add(label1);
-        current = current.getNext();
-        body.generateIR(current, functionState, forStack, function);
-        function.body.add(new Goto(label3));
-        current = current.prev;
+            Address conditionReg = condition.getValue(current, functionState, forStack, function);
+            Branch br = new Branch();
+            br.src = conditionReg;
+            br.label1 = label1;
+            br.label2 = label2;
+            function.body.add(br);
 
-        function.body.add(label2);
-        current = current.getNext();
-        elseBody.generateIR(current, functionState, forStack, function);
-        current = current.prev;
+            function.body.add(label1);
+            current = current.getNext();
+            body.generateIR(current, functionState, forStack, function);
+            function.body.add(new Goto(label3));
+            current = current.prev;
 
-        function.body.add(label3);
+            function.body.add(label2);
+            current = current.getNext();
+            elseBody.generateIR(current, functionState, forStack, function);
+            current = current.prev;
 
+            function.body.add(label3);
+        } else {
+            label1 = new Label();
+            label2 = new Label();
+
+            Address conditionReg = condition.getValue(current, functionState, forStack, function);
+            Branch br = new Branch();
+            br.label1 = label1;
+            br.label2 = label2;
+            function.body.add(br);
+
+            function.body.add(label1);
+            current = current.getNext();
+            body.generateIR(current, functionState, forStack, function);
+            current = current.prev;
+
+            function.body.add(label2);
+        }
         /*
         Expr
         Branch
@@ -99,5 +117,13 @@ public class IfStatement extends Statement {
             else body
         Label3
         */
+
+        /*
+        Expr
+        Branch
+        Label1
+            then body
+        Label2
+         */
     }
 }

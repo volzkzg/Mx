@@ -98,6 +98,7 @@ public class VariableDeclaration extends Declaration {
             outputErrorInfomation(this);
             return false;
         }
+
         this.ret = current.insert(variableName, this);
         if (!this.ret) {
             outputErrorInfomation(this);
@@ -118,20 +119,17 @@ public class VariableDeclaration extends Declaration {
 
     public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
                               Function function) {
-        Temp register = new Temp();
+        // 插入 symbol table
         current.insert(variableName, this);
-        this.reg = register;
 
+        // 创建一个新的寄存器用来保存目前的参数
+        Temp register = new Temp();
+        this.reg = register;
         function.args.add(register);
 
+        // 考虑默认初始化的情况
         if (expression != null) {
             function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
-            /*
-            if (variableType instanceof ClassType || variableType instanceof ArrayType)
-                function.body.add(new Assign(register, expression.getAddress(current, functionState, forStack, function)));
-            else
-                function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
-            */
         }
     }
 }

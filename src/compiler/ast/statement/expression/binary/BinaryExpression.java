@@ -188,14 +188,14 @@ public class BinaryExpression extends Expression {
     @Override
     public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
         Address lhs, rhs;
+        Temp dest = new Temp();
         lhs = leftHandSide.getValue(current, functionState, forStack, function);
         rhs = rightHandSide.getValue(current, functionState, forStack, function);
-        Temp dest = new Temp();
 
         if (operator == BinaryOperator.ASSIGN) {
             if (leftHandSide instanceof ArrayAccessExpression ||
                     leftHandSide instanceof FieldAccessExpression) {
-                MemoryAddress memoryAddress = leftHandSide.getAddress(current, functionState, forStack, function);
+                MemoryAddress memoryAddress = (MemoryAddress) leftHandSide.getAddress(current, functionState, forStack, function);
                 MemoryRead memoryRead = new MemoryRead(dest, memoryAddress);
                 Assign assign = new Assign(dest, rhs);
                 MemoryWrite memoryWrite = new MemoryWrite(dest, memoryAddress);
@@ -209,15 +209,56 @@ public class BinaryExpression extends Expression {
                 function.body.add(assign);
                 return lhs;
             }
+        }
 
-            /*
-            Assign assign = new Assign();
-            assign.dest = lhs;
-            assign.src = rhs;
-            function.body.add(assign);
-            return lhs;
-            */
-        } else if (operator == BinaryOperator.ADD) {
+        if (lhs instanceof IntegerConst &&
+                rhs instanceof IntegerConst) {
+            IntegerConst result;
+            switch (operator) {
+                case ADD: result = new IntegerConst(((IntegerConst) lhs).value + ((IntegerConst) rhs).value); break;
+                case SUB: result = new IntegerConst(((IntegerConst) lhs).value - ((IntegerConst) rhs).value); break;
+                case MUL: result = new IntegerConst(((IntegerConst) lhs).value * ((IntegerConst) rhs).value); break;
+                case DIV: result = new IntegerConst(((IntegerConst) lhs).value / ((IntegerConst) rhs).value); break;
+                case MOD: result = new IntegerConst(((IntegerConst) lhs).value % ((IntegerConst) rhs).value); break;
+                case BITWISE_AND: result = new IntegerConst(((IntegerConst) lhs).value & ((IntegerConst) rhs).value); break;
+                case BITWISE_EXCLUSIVE_OR: result = new IntegerConst(((IntegerConst) lhs).value ^ ((IntegerConst) rhs).value); break;
+                case BITWISE_INCLUSIVE_OR: result = new IntegerConst(((IntegerConst) lhs).value | ((IntegerConst) rhs).value); break;
+                case LOGICAL_AND: result = new IntegerConst(((IntegerConst) lhs).value & ((IntegerConst) rhs).value); break;
+                case LOGICAL_OR: result = new IntegerConst(((IntegerConst) lhs).value | ((IntegerConst) rhs).value); break;
+                case EQUAL: result = new IntegerConst(1 - (((IntegerConst) lhs).value - ((IntegerConst) rhs).value)); break;
+                case NOT_EQUAL: result = new IntegerConst(((IntegerConst) lhs).value - ((IntegerConst) rhs).value); break;
+                case LESS: if (((IntegerConst) lhs).value < ((IntegerConst) rhs).value) {
+                    result = new IntegerConst(1);
+                } else {
+                    result = new IntegerConst(0);
+                }
+                    break;
+                case LEQ: if (((IntegerConst) lhs).value <= ((IntegerConst) rhs).value) {
+                    result = new IntegerConst(1);
+                } else {
+                    result = new IntegerConst(0);
+                }
+                    break;
+                case GREAT: if (((IntegerConst) lhs).value > ((IntegerConst) rhs).value) {
+                    result = new IntegerConst(1);
+                } else {
+                    result = new IntegerConst(0);
+                }
+                    break;
+                case GEQ: if (((IntegerConst) lhs).value > ((IntegerConst) rhs).value) {
+                    result = new IntegerConst(1);
+                } else {
+                    result = new IntegerConst(0);
+                }
+                    break;
+                case LEFT_SHIFT: result = new IntegerConst(((IntegerConst) lhs).value << ((IntegerConst) rhs).value); break;
+                case RIGHT_SHIFT: result = new IntegerConst(((IntegerConst) lhs).value >> ((IntegerConst) rhs).value); break;
+                default: result = null;
+            }
+            return result;
+        }
+
+        if (operator == BinaryOperator.ADD) {
             ArithmeticExpr arithmeticExpr = new ArithmeticExpr(dest, lhs, ArithmeticOp.ADD, rhs);
             function.body.add(arithmeticExpr);
         } else if (operator == BinaryOperator.SUB) {

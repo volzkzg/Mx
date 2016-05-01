@@ -1,4 +1,4 @@
-// Generated from /Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/src/volzkzg/parser/Grammar.g4 by ANTLR 4.5.1
+// Generated from /Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/src/compiler/parser/Grammar.g4 by ANTLR 4.5.1
 package compiler.parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

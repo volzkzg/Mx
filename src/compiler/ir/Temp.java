@@ -9,4 +9,9 @@ public class Temp extends Address {
     public Temp() {
         num = tempCount++;
     }
+
+    public String print() {
+        String ret = "$R" + ((Integer) num).toString();
+        return ret;
+    }
 }

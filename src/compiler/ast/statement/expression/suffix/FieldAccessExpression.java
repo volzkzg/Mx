@@ -8,6 +8,8 @@ import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.VariableDeclarationStatement;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ClassType;
+import compiler.ast.type.Type;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -62,5 +64,33 @@ public class FieldAccessExpression extends Expression {
         }
 
         return true;
+    }
+
+    @Override
+    public Address getAddress(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Type type = object.expressionType;
+        if (type instanceof ClassType) {
+            ClassDeclaration className = (ClassDeclaration) current.find(((ClassType) type).className);
+            MemoryAddress memoryAddress = new MemoryAddress();
+            memoryAddress.start = className.reg;
+            int cnt = 0;
+            for (VariableDeclarationStatement p : className.classFields) {
+                if (field.name.equals(p.variableName.name)) {
+                    break;
+                }
+                cnt++;
+            }
+            memoryAddress.offset = new IntegerConst(4 * (cnt + 1));
+            return memoryAddress;
+        }
+        return null;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        MemoryAddress memoryAddress = (MemoryAddress) this.getAddress(current, functionState, forStack, function);
+        Temp tmp = new Temp();
+        function.body.add(new ArithmeticExpr(tmp, memoryAddress.start, ArithmeticOp.ADD, memoryAddress.offset));
+        return tmp;
     }
 }

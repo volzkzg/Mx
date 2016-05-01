@@ -5,6 +5,9 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.StringType;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.StringAddressConst;
 
 import java.util.Stack;
 
@@ -32,5 +35,11 @@ public class StringLiteral extends Expression {
         isLvalue = false;
         expressionType = new StringType();
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        StringAddressConst ret = new StringAddressConst(value);
+        return ret;
     }
 }

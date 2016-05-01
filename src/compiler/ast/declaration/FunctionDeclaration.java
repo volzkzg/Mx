@@ -92,15 +92,19 @@ public class FunctionDeclaration extends Declaration {
 
     public Function generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack) {
         current = current.getNext();
+
         Function ret = new Function();
         ret.name = functionName.name;
+
+        // 将参数列表翻译成 IR
         for (Node p : parameterList) {
             ((VariableDeclaration) p).generateIR(current, this, forStack, ret);
         }
+
+        // 将函数主体翻译成 IR
         ((CompoundStatement) functionBody).generateIR(current, this, forStack, ret);
+
         current = current.prev;
         return ret;
-
-        //done
     }
 }

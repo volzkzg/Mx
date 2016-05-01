@@ -16,4 +16,12 @@ public class IR {
     public IR(List<Function> parts) {
         this.parts = parts;
     }
+
+    public String print() {
+        String ret = "";
+        for (Function p : parts) {
+            ret += p.print() + "\n\n";
+        }
+        return ret;
+    }
 }

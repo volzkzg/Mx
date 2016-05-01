@@ -105,21 +105,13 @@ public class ForLoopStatement extends Statement {
 
         /*
         Expr1
-
         Label1
-
         Expr2
-
         Branch
-
         Label2
-
         Body
-
         Label3
-
         Expr3 goto label1
-
         Label 4
          */
     }

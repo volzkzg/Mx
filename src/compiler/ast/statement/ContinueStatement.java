@@ -28,7 +28,12 @@ public class ContinueStatement extends Statement {
 
     @Override
     public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
-        ForLoopStatement top = ((ForLoopStatement) forStack.peek());
-        function.body.add(new Goto(top.label3));
+        Node top = ((ForLoopStatement) forStack.peek());
+
+        if (top instanceof ForLoopStatement) {
+            function.body.add(new Goto(((ForLoopStatement) top).label3));
+        } else if (top instanceof WhileLoopStatement) {
+            function.body.add(new Goto(((WhileLoopStatement) top).label1));
+        }
     }
 }

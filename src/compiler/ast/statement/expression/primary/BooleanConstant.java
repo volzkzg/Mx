@@ -5,6 +5,9 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.BoolType;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.IntegerConst;
 
 import java.util.Stack;
 
@@ -32,5 +35,16 @@ public class BooleanConstant extends Expression {
         isLvalue = false;
         expressionType = new BoolType();
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        IntegerConst ret = new IntegerConst();
+        if (value == Boolean.TRUE) {
+            ret.value = 1;
+        } else {
+            ret.value = 0;
+        }
+        return ret;
     }
 }

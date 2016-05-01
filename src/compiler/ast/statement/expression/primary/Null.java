@@ -5,6 +5,9 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.NullType;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.IntegerConst;
 
 import java.util.Stack;
 
@@ -22,5 +25,10 @@ public class Null extends Expression {
         isLvalue = true;
         expressionType = new NullType();
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        return new IntegerConst(0);
     }
 }

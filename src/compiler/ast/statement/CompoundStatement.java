@@ -50,9 +50,11 @@ public class CompoundStatement extends Statement {
                            Function function) {
         if (functionState == null)
             current = current.getNext();
+
         for (Statement p : statements) {
             p.generateIR(current, functionState, forStack, function);
         }
+
         if (function == null)
             current = current.prev;
     }

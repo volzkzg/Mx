@@ -2,11 +2,13 @@ package compiler.ast.statement.expression.primary;
 
 import compiler.ast.Node;
 import compiler.ast.SymbolTable;
+import compiler.ast.declaration.ClassDeclaration;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.ClassType;
 import compiler.ast.type.Type;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -77,5 +79,36 @@ public class CreationExpression extends Expression {
         expressionType = name;
         isLvalue = false;
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        if (name instanceof ArrayType) {
+            Expression expression = null;
+            Type type = name;
+            while (expression == null) {
+                expression = ((ArrayType) type).dimension;
+                type = ((ArrayType) type).baseType;
+            }
+            IntegerConst size = (IntegerConst) expression.getValue(current, functionState, forStack, function);
+            size = new IntegerConst((size.value + 1) * 4);
+            Temp length = new Temp();
+            Temp dest = new Temp();
+            function.body.add(new Assign(length, size));
+            Allocate allocate = new Allocate(dest, size);
+            function.body.add(allocate);
+            MemoryWrite memoryWrite = new MemoryWrite(dest, new IntegerConst(0), length);
+            return dest;
+        } else if (name instanceof ClassType) {
+            IntegerConst classSize = (IntegerConst) ((ClassDeclaration)current.find(((ClassType) name).className)).getValue(current, functionState, forStack, function);
+            IntegerConst size = new IntegerConst(classSize.value * 4);
+            Temp length = new Temp();
+            function.body.add(new Assign(length, size));
+            Temp dest = new Temp();
+            Allocate allocate = new Allocate(dest, length);
+            function.body.add(allocate);
+            return dest;
+        }
+        return null;
     }
 }

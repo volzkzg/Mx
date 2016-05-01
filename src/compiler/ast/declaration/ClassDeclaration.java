@@ -4,6 +4,9 @@ import compiler.ast.Node;
 import compiler.ast.Symbol;
 import compiler.ast.SymbolTable;
 import compiler.ast.statement.VariableDeclarationStatement;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.IntegerConst;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,5 +55,9 @@ public class ClassDeclaration extends Declaration {
         }
         current = current.prev;
         return true;
+    }
+
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        return new IntegerConst(classFields.size());
     }
 }

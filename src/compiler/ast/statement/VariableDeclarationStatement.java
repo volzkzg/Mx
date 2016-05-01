@@ -99,17 +99,16 @@ public class VariableDeclarationStatement extends Statement {
 
     public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
                            Function function) {
-        Temp register = new Temp();
+        // 插入 Symbol Table
         current.insert(variableName, this);
+
+        // 创建一个新的寄存器来保存当前这个变量
+        Temp register = new Temp();
         this.reg = register;
 
-        function.args.add(register);
-
+        // 做初始化
         if (expression != null) {
-            if (variableType instanceof ClassType || variableType instanceof ArrayType)
-                function.body.add(new Assign(register, expression.getAddress(current, functionState, forStack, function)));
-            else
-                function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
+                    function.body.add(new Assign(register, expression.getValue(current, functionState, forStack, function)));
         }
     }
 }

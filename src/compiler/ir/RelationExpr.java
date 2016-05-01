@@ -28,4 +28,17 @@ public class RelationExpr extends Quadruple {
         this.src2 = null;
     }
 
+    public String print() {
+        String ret = dest.print() + " " + "=" + " ";
+        switch (op) {
+            case EQ:ret += "seq "; break;
+            case NE:ret += "sne "; break;
+            case LE:ret += "sle "; break;
+            case LT:ret += "slt "; break;
+            case GE:ret += "sge "; break;
+            case GT:ret += "sgt "; break;
+        }
+        ret += src1.print() + " " + src2.print();
+        return ret;
+    }
 }

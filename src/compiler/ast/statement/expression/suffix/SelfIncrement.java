@@ -5,6 +5,7 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.IntType;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -47,5 +48,24 @@ public class SelfIncrement extends Expression {
             }
         }
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Address address = expression.getAddress(current, functionState, forStack, function);
+        if (address instanceof Temp) {
+            function.body.add(new ArithmeticExpr(address, address, ArithmeticOp.ADD, new IntegerConst(1)));
+            return address;
+        } else if (address instanceof MemoryAddress) {
+            Temp temp = new Temp();
+            MemoryRead memoryRead = new MemoryRead(temp, (MemoryAddress) address);
+            ArithmeticExpr arithmeticExpr = new ArithmeticExpr(temp, temp, ArithmeticOp.ADD, new IntegerConst(1));
+            MemoryWrite memoryWrite = new MemoryWrite(temp, (MemoryAddress) address);
+            function.body.add(memoryRead);
+            function.body.add(arithmeticExpr);
+            function.body.add(memoryWrite);
+            return temp;
+        }
+        return null;
     }
 }

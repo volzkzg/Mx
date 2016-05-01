@@ -83,5 +83,13 @@ public class WhileLoopStatement extends Statement {
         current = current.prev;
 
         function.body.add(label3);
+        /*
+        Label1
+        Expr
+        Branch
+        	Label2
+	        body
+        Label3
+         */
     }
 }

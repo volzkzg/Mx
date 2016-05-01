@@ -22,7 +22,7 @@ public class Build {
     public static void main(String[] args) throws Exception {
 //        String inputFile = "/Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/src/compiler/testfile/compile_error/incop-1-5120309049-liaochao.mx";
 //        String inputFile = "/Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/src/compiler/testfile/test.mx";
-        String inputFile = "/Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/testfile/passed/test.mx";
+        String inputFile = "/Users/bluesnap/Documents/Project/IntelliJ Idea Project/Mx/testfile/ir/array1.mx";
         InputStream is = new FileInputStream(inputFile);
         ANTLRInputStream input = new ANTLRInputStream(is);
         GrammarLexer lexer = new GrammarLexer(input);
@@ -38,14 +38,19 @@ public class Build {
 
         boolean ret = true;
         SymbolTable table = new SymbolTable();
-        ret = ret & AstBuilderListener.property.get(tree).first(table);
-        ret = ret & AstBuilderListener.property.get(tree).second(table);
-        ret = ret & AstBuilderListener.property.get(tree).third(table, null, new Stack<>());
-        if (ret)
-            System.out.println("YES");
-        else
-            System.out.println("NO");
+        ret = ret & (AstBuilderListener.property.get(tree).first(table));
+        System.out.println("Not fuck in first round");
+        ret = ret & (AstBuilderListener.property.get(tree).second(table));
+        System.out.println("Not fuck in second round");
+        ret = ret & (AstBuilderListener.property.get(tree).third(table, null, new Stack<>()));
+        System.out.println("Not fuck in third round");
 
-        IR ir = ((AbstractSyntaxTree) AstBuilderListener.property.get(tree)).generateIR(table);
+        if (ret)
+            System.out.println("Sematic Check YES");
+        else
+            System.out.println("Sematic Check NO");
+
+        IR ir = ((AbstractSyntaxTree) AstBuilderListener.property.get(tree)).generateIR(table, null, new Stack<>());
+        System.out.println(ir.print());
     }
 }

@@ -7,6 +7,7 @@ import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ArrayType;
 import compiler.ast.type.IntType;
 import compiler.ast.type.Type;
+import compiler.ir.*;
 
 import java.util.Stack;
 
@@ -62,5 +63,32 @@ public class ArrayAccessExpression extends Expression {
         }
 
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        MemoryAddress res = (MemoryAddress) this.getAddress(current, functionState, forStack, function);
+        Temp tmp = new Temp();
+        function.body.add(new ArithmeticExpr(tmp, res.start, ArithmeticOp.ADD, res.offset));
+        return tmp;
+    }
+
+    @Override
+    public Address getAddress(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
+                                    Function function) {
+        MemoryAddress memoryAddress = new MemoryAddress();
+        Address exp = expression.getValue(current, functionState, forStack, function);
+        Address dim = dimension.getValue(current, functionState, forStack, function);
+        if (dim instanceof IntegerConst) {
+            memoryAddress.start = exp;
+            memoryAddress.offset = new IntegerConst(4 * (((IntegerConst) dim).value + 1));
+            return memoryAddress;
+        } else {
+            Temp tmp = new Temp();
+            function.body.add(new ArithmeticExpr(tmp, exp, ArithmeticOp.ADD, dim));
+            memoryAddress.start = tmp;
+            memoryAddress.offset = new IntegerConst(0);
+            return memoryAddress;
+        }
     }
 }

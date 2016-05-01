@@ -7,13 +7,17 @@ public class MemoryAddress extends Address {
     public Address start;
     public IntegerConst offset;
 
-    MemoryAddress() {
+    public MemoryAddress() {
         start = null;
         offset = null;
     }
 
-    MemoryAddress(Address start, IntegerConst offset) {
+    public MemoryAddress(Address start, IntegerConst offset) {
         this.start = start;
         this.offset = offset;
+    }
+
+    public String print() {
+        return "";
     }
 }

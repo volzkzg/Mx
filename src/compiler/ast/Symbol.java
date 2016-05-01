@@ -10,6 +10,8 @@ import compiler.ast.declaration.VariableDeclaration;
 import compiler.ast.statement.VariableDeclarationStatement;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.ClassType;
+import compiler.ir.Address;
+import compiler.ir.Function;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -65,5 +67,15 @@ public class Symbol extends Expression {
             isLvalue = true;
         }
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        return current.find(this).reg;
+    }
+
+    @Override
+    public Address getAddress(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        return current.find(this).reg;
     }
 }

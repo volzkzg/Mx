@@ -15,4 +15,9 @@ public class Assign extends Quadruple {
         this.dest = dest;
         this.src = src;
     }
+
+    public String print() {
+        String ret = dest.print() + " = move " + src.print();
+        return ret;
+    }
 }

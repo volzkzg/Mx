@@ -10,6 +10,9 @@ import compiler.ast.type.IntType;
 import compiler.ast.type.StringType;
 import compiler.ast.type.Type;
 import compiler.ast.type.VoidType;
+import compiler.ir.Call;
+import compiler.ir.Function;
+import compiler.ir.Temp;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -152,5 +155,21 @@ public class FunctionCall extends Expression {
         isLvalue = false;
 
         return true;
+    }
+
+    @Override
+    public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        Call call = new Call();
+        call.callee = functionName.name;
+        for (Expression p : args) {
+            call.args.add(p.getValue(current, functionState, forStack, function));
+        }
+        FunctionDeclaration functionDeclaration = (FunctionDeclaration) current.find(functionName);
+        if (functionDeclaration.returnType instanceof VoidType) {
+            call.returnValue = null;
+        } else {
+            call.returnValue = new Temp();
+        }
+        function.body.add(call);
     }
 }

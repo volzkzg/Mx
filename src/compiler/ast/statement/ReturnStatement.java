@@ -59,7 +59,11 @@ public class ReturnStatement extends Statement {
 
     @Override
     public void generateIR(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
-        Address returnReg = returnExpression.getValue(current, functionState, forStack, function);
-        function.body.add(new Return(returnReg));
+        if (returnExpression == null) {
+            function.body.add(new Return());
+        } else {
+            Address returnReg = returnExpression.getValue(current, functionState, forStack, function);
+            function.body.add(new Return(returnReg));
+        }
     }
 }

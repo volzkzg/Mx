@@ -22,11 +22,15 @@ public class MemoryWrite extends Quadruple {
         this.size = 4;
     }
 
-    public MemoryWrite(Address dest, MemoryAddress memoryAddress) {
-        this.dest = dest;
+    public MemoryWrite(Address src, MemoryAddress memoryAddress) {
+        this.src = src;
         this.offset = memoryAddress.offset;
-        this.src = memoryAddress.start;
+        this.dest = memoryAddress.start;
         this.size = 4;
     }
 
+    public String print() {
+        String ret = "store" + " " + "4" + " " + dest.print() + " " + src.print() + " " + offset.print();
+        return ret;
+    }
 }

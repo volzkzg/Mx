@@ -9,4 +9,9 @@ public class Label extends Quadruple {
     public Label() {
         num = labelCount++;
     }
+
+    public String print() {
+        String ret = "%L" + ((Integer) num).toString();
+        return ret;
+    }
 }

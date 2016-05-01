@@ -29,4 +29,8 @@ public class MemoryRead extends Quadruple {
         this.size = 4;
     }
 
+    public String print() {
+        String ret = dest.print() + " = " + "load" + " " + "4" + " " + src.print() + " " + offset.print();
+        return ret;
+    }
 }

@@ -7,7 +7,6 @@ import compiler.ast.statement.Statement;
 import compiler.ast.type.Type;
 import compiler.ir.Address;
 import compiler.ir.Function;
-import compiler.ir.MemoryAddress;
 
 import java.util.Stack;
 
@@ -18,7 +17,7 @@ public class Expression extends Statement {
     public Type expressionType;
     public boolean isLvalue;
 
-    public MemoryAddress getAddress(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
+    public Address getAddress(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack,
                                             Function function) {
         return null;
     }

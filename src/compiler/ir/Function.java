@@ -26,4 +26,23 @@ public class Function {
         this.args = args;
     }
 
+    public String print() {
+        String ret = "func" + " " + name;
+        for (int i = 0; i < args.size(); ++i) {
+            ret += " " + args.get(i).print();
+        }
+        int w = 0;
+        ret += " " + "{\n" + "%" + name + ":\n";
+        for (Quadruple p : body) {
+            if (p instanceof Label) {
+                if (w == 1) ret += "\n";
+                w = 1;
+                ret += p.print() + ":\n";
+            } else {
+                ret += "\t" + p.print() + "\n";
+            }
+        }
+        ret += "}";
+        return ret;
+    }
 }

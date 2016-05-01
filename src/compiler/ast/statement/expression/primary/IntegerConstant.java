@@ -5,6 +5,9 @@ import compiler.ast.SymbolTable;
 import compiler.ast.declaration.FunctionDeclaration;
 import compiler.ast.statement.expression.Expression;
 import compiler.ast.type.IntType;
+import compiler.ir.Address;
+import compiler.ir.Function;
+import compiler.ir.IntegerConst;
 
 import java.math.BigInteger;
 import java.util.Stack;
@@ -33,6 +36,12 @@ public class IntegerConstant extends Expression {
         isLvalue = false;
         expressionType = new IntType();
         return true;
+    }
+
+    @Override
+    public Address getValue(SymbolTable current, FunctionDeclaration functionState, Stack<Node> forStack, Function function) {
+        IntegerConst ret = new IntegerConst(value.intValue());
+        return ret;
     }
 }
 

@@ -21,4 +21,16 @@ public class Call extends Quadruple {
         this.callee = callee;
         this.args = args;
     }
+
+    public String print() {
+        String ret = "";
+        for (int i = 0; i < args.size(); ++i) {
+            ret += " " + args.get(i).print();
+        }
+        ret = "call" + " " + callee  + ret;
+        if (returnValue != null) {
+            ret = returnValue.print() + " = " + ret;
+        }
+        return ret;
+    }
 }

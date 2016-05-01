@@ -5,10 +5,14 @@ package compiler.ir;
  */
 public class StringAddressConst extends Const {
     public String value;
-    StringAddressConst() {
+    public StringAddressConst() {
         value = null;
     }
-    StringAddressConst(String value) {
+    public StringAddressConst(String value) {
         this.value = value;
+    }
+
+    public String print() {
+        return value;
     }
 }

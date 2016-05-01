@@ -11,4 +11,10 @@ public class Return extends Quadruple {
     public Return(Address value) {
         this.value = value;
     }
+
+    public String print() {
+        String ret = "ret " + value.print();
+        return ret;
+    }
+
 }

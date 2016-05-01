@@ -13,4 +13,9 @@ public class Goto extends Quadruple {
     public Goto(Label label) {
         this.label = label;
     }
+
+    public String print() {
+        String ret = "jump " + label.print();
+        return ret;
+    }
 }

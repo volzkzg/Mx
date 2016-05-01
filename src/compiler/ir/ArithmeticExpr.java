@@ -5,7 +5,7 @@ package compiler.ir;
  */
 public class ArithmeticExpr extends Quadruple {
     public ArithmeticOp op;
-    public Address dest, src1, src2;
+    public Address dest, src1, src2; // src1 or src2 may be IntegerConst
 
     public ArithmeticExpr() {
         op = null;
@@ -28,4 +28,27 @@ public class ArithmeticExpr extends Quadruple {
         this.src2 = null;
     }
 
+    public String print() {
+        String ret = "";
+        ret += dest.print() + " = ";
+        switch (op) {
+            case ADD:ret += "add"; break;
+            case SUB:ret += "sub"; break;
+            case MUL:ret += "mul"; break;
+            case DIV:ret += "div"; break;
+            case MOD:ret += "rem"; break;
+            case SHL:ret += "shl"; break;
+            case SHR:ret += "shr"; break;
+            case XOR:ret += "xor"; break;
+            case OR:ret += "or"; break;
+            case AND:ret += "and"; break;
+            case MINUS:ret += "neg"; break;
+            case TILDE:ret += "not"; break;
+        }
+        ret += " " + src1.print();
+        if (src2 != null) {
+            ret += " " + src2.print();
+        }
+        return ret;
+    }
 }
